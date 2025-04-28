@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             CurrencySeeder::class,
             CountryCitySeeder::class, // إضافة seeder الدول والمدن
             LevelSeeder::class, // إضافة seeder المستويات
-            GamesTableSeeder::class, // Adding the games seeder
+            // GamesTableSeeder::class, // Adding the games seeder
         ]);
     }
 }
