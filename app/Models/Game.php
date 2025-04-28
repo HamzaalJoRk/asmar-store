@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Game extends Model implements TranslatableContract, HasMedia
 {
     use HasFactory, Translatable, InteractsWithMedia;
-    public $translatedAttributes = ['title','name_currency','keywords'];
+    public $translatedAttributes = ['title','name_currency','keywords','provider_type'];
 
     protected $guarded = [];
     protected $casts = [

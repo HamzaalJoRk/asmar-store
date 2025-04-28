@@ -43,7 +43,7 @@ class GameRequest extends FormRequest
             'quantity_package'=>'',
             'is_active_package'=>'',
             'ar' => 'required|array',
-            'ar.title' => 'required|unique:game_translations,title,'.$game_i,
+            'ar.title' => 'required',
             'ar.keywords' => 'required',
             'ar.name_currency' => 'required',
         ];
