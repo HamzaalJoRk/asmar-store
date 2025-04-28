@@ -1,0 +1,1 @@
+<?php /**PATH F:\hamza\new-store\resources\views/admin/layouts/master.blade.php ENDPATH**/ ?>

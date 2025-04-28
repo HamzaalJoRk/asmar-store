@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'provider' => 'Provider',
+    'providers' => 'Providers',
+    'name' => 'Name',
+    'image' => 'Profile Image',
+    'email' => 'Email',
+    'phone' => 'Phone',
+    'status' => 'Status',
+    'created_at' => 'Created At',
+    'transactions' => 'Transactions',
+    'permissions' => 'Permissions',
+    'allprovider' => 'All Providers',
+    'newprovider' => 'Add New Provider',
+    'editprovider' => 'Edit Provider',
+    'password' => 'Password',
+    'password_confirmation' => 'Password Confirmation',
+    'selectall' => 'Select All',
+    'all' => 'All',
+    'add-succes' => 'Added Successfully',
+    'update-succes' => 'Updated Successfully',
+    'delete-succes' => 'Deleted Successfully',
+    'change-succes' => 'Changed Successfully',
+    'success' => 'Success',
+    'save' => 'Save',
+];

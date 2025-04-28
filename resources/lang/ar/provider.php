@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'provider' => 'المزود',
+    'providers' => 'المزودين',
+    'name' => 'الاسم',
+    'image' => 'الصوره الشخصيه',
+    'email' => 'البريد الالكترونى',
+    'phone' => 'الجوال',
+    'status' => 'الحاله',
+    'created_at' => 'تاريخ الاضافه',
+    'transactions' => 'العمليات',
+    'permissions' => 'الصلاحيات',
+    'allprovider' => 'جميع المزودين',
+    'newprovider' => 'إضافة مزود جديد للوحة التحكم ',
+    'editprovider' => 'تعديل مزود',
+    'password' => 'كلمه المرور',
+    'password_confirmation' => 'تاكيد كلمه المرور',
+    'selectall' => 'اختر الكل',
+    'all' => 'الكل',
+    'add-succes' => 'تم الاضافه بنجاح',
+    'update-succes' => 'تم التعديل بنجاح',
+    'delete-succes' => 'تم الحذف بنجاح',
+    'change-succes' => 'تم تغيير بنجاح',
+    'success' => 'عمليه ناجحه',
+    'save' => 'حفظ',
+];
