@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\providersController;
 use App\Http\Requests\Front\OrderGameRequest;
 use App\Models\Game;
 use App\Models\Order;
@@ -39,30 +40,32 @@ class GameController extends Controller
      */
     public function show($slug)
     {
-        if(Auth::check()){
-            if(Auth::user()->whats_app == null) {
+        if (Auth::check()) {
+            if (Auth::user()->whats_app == null) {
                 return redirect()->route('front.completeRegister');
             }
         }
 
-        $game =Game::with('packages')->IsShow()->where('slug',$slug)->firstOrFail();
+        $game = Game::with('packages')->IsShow()->where('slug', $slug)->firstOrFail();
 
 
         return view('front.games.show')->with([
-            'game'=>$game,
+            'game' => $game,
         ]);
     }
-    public function Order (OrderGameRequest $request){
+    public function Order(OrderGameRequest $request)
+    {
         DB::beginTransaction();
-        
+
+        // dd($request->all());
         try {
             $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
             $user_id = auth()->id();
-            $invoice_no = 'ZM'.$randomNumber.$user_id;
+            $invoice_no = 'ZM' . $randomNumber . $user_id;
             $game = Game::where('id', $request->game_id)->first();
 
             // Get base price and quantity
-            if($game->have_packages) {
+            if ($game->have_packages) {
                 $package = Package::where('id', $request->package_id)->first();
                 $qty_item = $package->quantity;
                 $price_item = $package->price;
@@ -78,8 +81,8 @@ class GameController extends Controller
             $profit_percentage = $user->level ? $user->level->profit_percentage : 0;
             $profit_amount = ($base_total * $profit_percentage) / 100;
             $final_total = $base_total + $profit_amount;
-            
-            if($user->user_balance < $final_total) {
+
+            if ($user->user_balance < $final_total) {
                 DB::rollBack();
                 return redirect()->back()->with(['error_m' => __('translation.Your current balance is not enough, please top up and try again')]);
             } else {
@@ -95,8 +98,8 @@ class GameController extends Controller
                 $provider = Provider::where('id', $game->provider_id)->first();
 
                 $method = $provider->name;
-                if (method_exists(ProviderController::class, $method)) {
-                    $resault = ProviderController::$method($game, $request, $provider->api_key);
+                if (method_exists(providersController::class, $method)) {
+                    $resault = providersController::$method($game, $request, $provider->api_key);
                     if ($resault['success']) {
                         $providerId = $provider->id;
                         if ($method == 'soud') {
@@ -120,7 +123,7 @@ class GameController extends Controller
                 'price_item' => $price_item,
                 'base_total' => $base_total,
                 'profit_percentage' => $profit_percentage,
-                'profit_amount' => $profit_amount,
+                'profit' => $profit_amount,
                 'final_total' => $final_total,
                 'details' => $request->note,
                 'provider_order_id' => $orderId,
