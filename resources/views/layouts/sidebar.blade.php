@@ -50,6 +50,14 @@
                     </a>
                 </li>
                 @endif
+                @if (auth()->user()->hasPermission('read_games'))
+                <li>
+                    <a href="{{route('ad.categories.index')}}" >
+                        <i class="fa fa-subway"></i>
+                        <span key="t-dashboards">{{ __('categories.categories') }}</span>
+                    </a>
+                </li>
+                @endif
                 @if (auth()->user()->hasPermission('read_banks'))
                 <li>
                     <a href="{{route('ad.banks.index')}}" >

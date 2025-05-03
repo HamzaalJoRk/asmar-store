@@ -113,6 +113,29 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="categories" class="form-label">
+                                    الفئة
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-control" name="category_id" id="categories" required>
+                                        <option value="">اختر فئة </option>
+                                        @foreach($categories as $category)
+                                            <option 
+                                                value="{{ $category->id }}" 
+                                                {{ old('category_id', $game->category_id) == $category->id ? 'selected' : '' }}
+                                            >
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="validationCustom02" class="form-label">  @lang('translation.min_qty')</label>

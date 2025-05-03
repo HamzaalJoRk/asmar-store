@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\providersController;
 use App\Http\Requests\Front\OrderGameRequest;
+use App\Models\Category;
 use App\Models\Game;
 use App\Models\Order;
 use App\Models\Package;
@@ -38,6 +39,23 @@ class GameController extends Controller
      *layouts-scrollable
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function indexByCategory(Category $category)
+    {
+        $games = $category->games()->paginate(10);
+        return view('admin.categories.games', compact('category', 'games'));
+    }
+
+    public function gamesCatygory($category)
+    {
+        $category = Category::findOrFail($category);
+        $allGames = Game::IsShow()->get();
+        $games = $allGames->where('category_id',$category->id);
+        // dd($category);
+        return view('front.games', compact('category', 'games'));
+    }
+
+
     public function show($slug)
     {
         if (Auth::check()) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GameRequest;
+use App\Models\Category;
 use App\Models\Game;
 use App\Models\Package;
 use App\Models\Provider;
@@ -68,18 +69,22 @@ class CurdGamesController extends Controller
     }
     public function create()
     {
-        return view('admin.games.index');
+        $categories = Category::all();
+        return view('admin.games.index', compact('categories'));
     }
 
     public function edit($id)
     {
+        $categories = Category::all();
         $game = Game::findorFail($id);
         $providers = \App\Models\Provider::where('is_active', 1)->get();
-        return view('admin.games.edit', compact('game', 'providers'));
+        return view('admin.games.edit', compact('game', 'providers','categories'));
     }
 
     public function store(GameRequest $request)
     {
+
+        // dd($request->all());
         $data = $request->except('price_qty_package', 'quantity_package', 'is_active_package', 'icon', 'background', 'background_package', 'icon_coins');
 
         if (!isset($data['need_name_player'])) {

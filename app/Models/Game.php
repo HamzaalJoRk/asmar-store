@@ -12,12 +12,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Game extends Model implements TranslatableContract, HasMedia
 {
     use HasFactory, Translatable, InteractsWithMedia;
-    public $translatedAttributes = ['title','name_currency','keywords','provider_type'];
+    public $translatedAttributes = ['title', 'name_currency', 'keywords', 'provider_type'];
 
     protected $guarded = [];
     protected $casts = [
         'provider_params' => 'array'
     ];
+
     protected $appends = [
         'active_string',
         'name_player_string',
@@ -28,7 +29,7 @@ class Game extends Model implements TranslatableContract, HasMedia
 
     public function scopeIsShow($query)
     {
-        return $query->where('is_show',  1);
+        return $query->where('is_show', 1);
     }
 
     public function provider()
@@ -36,27 +37,33 @@ class Game extends Model implements TranslatableContract, HasMedia
         return $this->belongsTo(Provider::class);
     }
 
-    public  function getIconAttribute()
+    public function getIconAttribute()
     {
-        return $this->getFirstMediaUrl('icon')?:asset('images/default/game.png');
+        return $this->getFirstMediaUrl('icon') ?: asset('images/default/game.png');
     }
-    public  function getBackgroundAttribute()
+    public function getBackgroundAttribute()
     {
-        return $this->getFirstMediaUrl('background')?:asset('images/default/background-game.png');
+        return $this->getFirstMediaUrl('background') ?: asset('images/default/background-game.png');
     }
-    public  function getIconCurrancyAttribute()
+    public function getIconCurrancyAttribute()
     {
-        return $this->getFirstMediaUrl('icon_coins')?:asset('images/default/icon_coins.png');
+        return $this->getFirstMediaUrl('icon_coins') ?: asset('images/default/icon_coins.png');
     }
-    public  function getBackgroundPackageAttribute()
+    public function getBackgroundPackageAttribute()
     {
-        return $this->getFirstMediaUrl('background_package')?:asset('images/default/background_package.png');
+        return $this->getFirstMediaUrl('background_package') ?: asset('images/default/background_package.png');
     }
+
+    public function catygories()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function getActiveStringAttribute()
     {
-        $arr=[
-            '0'=>'InActive',
-            '1'=>'Active',
+        $arr = [
+            '0' => 'InActive',
+            '1' => 'Active',
 
         ];
         return $arr[$this->is_active];
@@ -64,9 +71,9 @@ class Game extends Model implements TranslatableContract, HasMedia
 
     public function getNamePlayerStringAttribute()
     {
-        $arr=[
-            '0'=>'No',
-            '1'=>'Yes',
+        $arr = [
+            '0' => 'No',
+            '1' => 'Yes',
 
         ];
         return $arr[$this->need_name_player];
@@ -74,9 +81,9 @@ class Game extends Model implements TranslatableContract, HasMedia
 
     public function getIdPlayerStringAttribute()
     {
-        $arr=[
-            '0'=>'No',
-            '1'=>'Yes',
+        $arr = [
+            '0' => 'No',
+            '1' => 'Yes',
 
         ];
         return $arr[$this->need_id_player];
@@ -84,9 +91,9 @@ class Game extends Model implements TranslatableContract, HasMedia
 
     public function getHavePackagesStringAttribute()
     {
-        $arr=[
-            '0'=>'No',
-            '1'=>'Yes',
+        $arr = [
+            '0' => 'No',
+            '1' => 'Yes',
 
         ];
         return $arr[$this->have_packages];
@@ -94,9 +101,9 @@ class Game extends Model implements TranslatableContract, HasMedia
 
     public function getIsShowStringAttribute()
     {
-        $arr=[
-            '0'=>'hide',
-            '1'=>'show',
+        $arr = [
+            '0' => 'hide',
+            '1' => 'show',
 
         ];
         return $arr[$this->is_show];
@@ -104,7 +111,8 @@ class Game extends Model implements TranslatableContract, HasMedia
 
 
 
-    public  function  packages(){
+    public function packages()
+    {
         return $this->hasMany(Package::class);
     }
 }

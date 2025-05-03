@@ -22,6 +22,8 @@ class GameRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        // dd($this->all());
         $game_i=null;
         $game_t=  DB::table('game_translations')
             ->where('locale','ar')
@@ -38,6 +40,7 @@ class GameRequest extends FormRequest
             'need_name_player' => 'nullable',
             'need_id_player' => 'nullable',
             'price_qty' => 'required',
+            'category_id' => 'required',
             'min_qty' => 'required|integer|min:1',
             'price_qty_package'=>'',
             'quantity_package'=>'',

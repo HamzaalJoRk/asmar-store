@@ -53,14 +53,16 @@ class AuthController extends Controller
             'user_name' => 'required',
             'password' => 'required|min:3'
         ]);
+        $User = User::where('email', $request->user_name)->first();
+        // dd($User);
+        // dd($User->password, $request->password, Hash::check($request->password, $User->password));
 
-        $User = User::where('user_name', $request->user_name)->first();
         if($User){
             if (!$User->is_active ){
                 return redirect()->back()->withErrors('is not active');
 
             }
-            if (auth()->attempt(['user_name' => $request->user_name, 'password' => $request->password], $request->remember)) {
+            if (auth()->attempt(['email' => $request->user_name, 'password' => $request->password], $request->remember)) {
                 return redirect()->route('front.index');
             }
         }

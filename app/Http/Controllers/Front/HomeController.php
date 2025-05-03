@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\City;
 use App\Models\Game;
 use App\Models\User;
@@ -37,8 +38,10 @@ class HomeController extends Controller
             }
         }
         $games =Game::IsShow()->get();
+        $categories = Category::all();
         return view('front.index')->with([
             'games'=>$games,
+            'categories'=>$categories,
         ]);
     }
 
