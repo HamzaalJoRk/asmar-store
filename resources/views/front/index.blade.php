@@ -28,7 +28,7 @@
                                             <div class="name_wrp"
                                                 style="background-image:url({{ asset('storage/' . $category->image) }});">
                                                 <div class="icon">
-                                                    <img src="{{ asset('storage/' . $category->image) }}"
+                                                    <img src="{{ $category->image }}"
                                                         alt="{{ $category->name }}" width="60">
                                                 </div>
                                             </div>
