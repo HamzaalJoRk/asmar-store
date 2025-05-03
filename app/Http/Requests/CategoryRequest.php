@@ -13,7 +13,6 @@ class CategoryRequest extends FormRequest
         $id = $this->route('category')?->id;
         return [
             'name'   => 'required|string|unique:categories,name,' . $id,
-            'image'  => ($this->isMethod('post') ? 'required|' : 'nullable|') . 'image|max:2048',
             'active' => 'required|boolean',
         ];
     }

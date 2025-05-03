@@ -39,7 +39,7 @@
                                             <td>{{ $i + 1 }}</td>
                                             <td>{{ $cat->name }}</td>
                                             <td>
-                                                <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}" width="60">
+                                                <img src="{{ $cat->image }}" alt="{{ $cat->name }}" width="60">
                                             </td>
                                             <td>{{ $cat->active ? __('Active') : __('Inactive') }}</td>
                                             <td>{{ $cat->created_at->diffForHumans() }}</td>

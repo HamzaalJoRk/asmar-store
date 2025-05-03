@@ -24,10 +24,17 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request)
     {
-        $data = $request->validated();
+        $data = $request->except('image');
+
+        // $data = $request->validated();
         // رفع الصورة
-        $data['image'] = $request->file('image')->store('categories', 'public');
-        Category::create($data);
+        // $data['image'] = $request->file('image')->store('categories', 'public');
+        $category = Category::create($data);
+        // dd($data);
+        if ($request->hasFile('image')) {
+            $category->addMedia($request->file('image'))->toMediaCollection('image');
+        }
+        // Category::create($data);
 
         Alert::success(__('settings.success'), __('categories.created'));
         return redirect()->route('ad.categories.index');
@@ -42,11 +49,15 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
+        // if ($request->hasFile('image')) {
+        //     Storage::disk('public')->delete($category->image);
+        //     $data['image'] = $request->file('image')->store('categories', 'public');
+        // }
         if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($category->image);
-            $data['image'] = $request->file('image')->store('categories', 'public');
-        }
+            $data->clearMediaCollection('image');
 
+            $data->addMedia($request->file('image'))->toMediaCollection('image');
+        }
         $category->update($data);
 
         Alert::success(__('settings.success'), __('categories.updated'));
@@ -55,10 +66,10 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        Storage::disk('public')->delete($category->image);
+        // Storage::disk('public')->delete($category->image);
+        $category->clearMediaCollection('image');
         $category->delete();
 
-        Alert::success(__('settings.success'), __('categories.deleted'));
         return redirect()->back();
     }
 }
