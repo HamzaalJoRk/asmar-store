@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('have_packages')->default(true);
             $table->boolean('need_name_player')->default(true);
             $table->boolean('need_id_player')->default(true);
-            $table->double('price_qty', 20, 20); 
+            $table->decimal('price_qty', 15, 2);
             $table->integer('min_qty')->default(1);
             $table->timestamps();
         });
