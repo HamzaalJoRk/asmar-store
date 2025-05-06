@@ -47,10 +47,10 @@
                                        class="product_group @if(!$category->active || $category->games->count() == 0) disabled @endif"
                                        data-group="soulchill">
                                         <div class="name_wrp" 
-                                             style="background-image:url({{ asset('storage/' . $category->image) }});">
-                                            <div class="icon">
+                                             style="background-image:url({{$category->image}});">
+                                            <!-- <div class="icon">
                                                 <img src="{{ $category->image }}" alt="{{ $category->name }}" width="60">
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <span class="d-block mt-2 mb-2">{{$category->name}}</span>
                                     </a>
