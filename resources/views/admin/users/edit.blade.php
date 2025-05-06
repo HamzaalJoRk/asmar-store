@@ -55,6 +55,17 @@
                             <div class="col-md-4">
                                 {{-- phone --}}
                                 <div class="form-group">
+                                    <label>الرصيد<span class="text-danger">*</span></label>
+                                    <input type="tel" name="user_balance" class="form-control" value="{{ old('user_balance',$user->user_balance) }}"
+                                        placeholder="@lang('users.phone')" step="any" />
+                                    @error('user_balance')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                {{-- phone --}}
+                                <div class="form-group">
                                     <label>@lang('users.phone')<span class="text-danger">*</span></label>
                                     <input type="tel" name="whats_app" class="form-control" value="{{ old('whats_app',$user->whats_app) }}"
                                         placeholder="@lang('users.phone')" maxlength="11" minlength="11"

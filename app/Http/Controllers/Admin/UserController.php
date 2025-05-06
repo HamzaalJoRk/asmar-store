@@ -25,18 +25,31 @@ class UserController extends Controller
 
     }// end of __construct
 
+
+    public function resetBalances()
+    {
+
+        // تحديث رصيد كل المستخدمين إلى 0
+        User::query()->update(['user_balance' => 0]);
+
+        // \RealRashid\SweetAlert\Facades\Alert::success('تمت العملية', 'تم تصفير جميع الأرصدة بنجاح');
+        return redirect()->back();
+    }
+
+
     public function index()
     {
-        $users = User::with('country','city','currency','level')->latest()->paginate(10);
-        return view('admin.users.index',compact('users'));
+        $users = User::with('country', 'city', 'currency', 'level')->latest()->paginate(10);
+        return view('admin.users.index', compact('users'));
     }// end of index
 
-    public function create(){
+    public function create()
+    {
         $currencys = Currency::get();
         $countries = Country::get();
         $cities = City::get();
         $levels = Level::orderBy('sort')->get();
-        return view('admin.users.create',compact('countries','cities','currencys','levels'));
+        return view('admin.users.create', compact('countries', 'cities', 'currencys', 'levels'));
     }// end of create
 
     public function store(UserRequest $request)
@@ -55,7 +68,7 @@ class UserController extends Controller
         if (request('avatar')) {
             $input['avatar'] = store_file(request('avatar'), 'users');
         }
-        $user=User::create($input);
+        $user = User::create($input);
         Alert::success(__('settings.success'), __('createsms'));
         return redirect()->route('ad.users.index');
     }
@@ -66,7 +79,7 @@ class UserController extends Controller
         $countries = Country::get();
         $cities = City::get();
         $levels = Level::orderBy('sort')->get();
-        return view('admin.users.edit',compact('user','countries','cities','currencys','levels'));
+        return view('admin.users.edit', compact('user', 'countries', 'cities', 'currencys', 'levels'));
     }
 
     public function update(UserRequest $request, User $user)
@@ -78,9 +91,10 @@ class UserController extends Controller
         $input['is_active'] = $request->is_active;
         $input['currency_id'] = $request->currency_id;
         $input['country_id'] = $request->country_id;
+        $input['user_balance'] = $request->user_balance;
         $input['city_id'] = $request->city_id;
         $input['level_id'] = $request->level_id;
-        if(trim($request->password) != ''){
+        if (trim($request->password) != '') {
             $input['password'] = bcrypt($request->password);
         }
         if ($request->file('avatar')) {

@@ -118,6 +118,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale() . '/ad', 'as' => 'ad.
 
 });
 
+Route::post('admin/users/reset-balances', [UserController::class, 'resetBalances'])->name('ad.users.resetBalances');
+
+
 Route::prefix('admin/settings')->group(function () {
     Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('ad.settings.index');
     Route::post('/advertisements', [AdvertisementController::class, 'store'])->name('ad.settings.store');

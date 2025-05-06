@@ -6,12 +6,12 @@
 
 @section('content')
     @component('components.breadcrumb')
-        @slot('li_1')
-        @lang('site.home')
-        @endslot
-        @slot('title')
-        @lang('users.users')
-        @endslot
+    @slot('li_1')
+    @lang('site.home')
+    @endslot
+    @slot('title')
+    @lang('users.users')
+    @endslot
     @endcomponent
     <div class="row">
         <div class="col-lg-12">
@@ -24,11 +24,19 @@
                                     @lang('Add')
                                 </a>
                             @endif
+                            @if (auth()->user()->hasPermission('update_users'))
+                                <form action="{{ route('ad.users.resetBalances') }}" method="POST" style="display:inline;" id="withdrawForm">
+                                    @csrf
+                                    <button type="button" class="btn btn-danger" onclick="confirmWithdraw()">
+                                        سحب كل الأرصدة
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    @if (@isset($users) && !@empty($users) && count($users) > 0 )
+                    @if (@isset($users) && !@empty($users) && count($users) > 0)
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle nowrap">
                                 <thead>
@@ -49,21 +57,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $index=>$user)
+                                    @foreach ($users as $index => $user)
                                         <tr>
-                                            <th scope="row">{{ $index+1 }}</th>
+                                            <th scope="row">{{ $index + 1 }}</th>
                                             <th scope="row">
                                                 @if($user->avatar)
-                                                <img src="{{display_file($user->avatar)}}" style="width: 50px; height: 50px;"
-                                                alt="{{ $user->name }}" >
+                                                    <img src="{{display_file($user->avatar)}}" style="width: 50px; height: 50px;"
+                                                        alt="{{ $user->name }}">
                                                 @else
-                                                <img src="{{ asset('no-image.jpg') }}" style="width: 50px;" alt="{{ $user->name }} ">
+                                                    <img src="{{ asset('no-image.jpg') }}" style="width: 50px;"
+                                                        alt="{{ $user->name }} ">
                                                 @endif
                                             </th>
                                             <th scope="row">{{ $user->name }}</th>
                                             <th scope="row">{{ $user->email }}</th>
                                             <th scope="row">
-                                                <a href="https://wa.me/{{ $user->whats_app }}?text=" target="_blank" title="{{ $user->whats_app }}">
+                                                <a href="https://wa.me/{{ $user->whats_app }}?text=" target="_blank"
+                                                    title="{{ $user->whats_app }}">
                                                     <img src="{{ asset('whatsapp.png') }}" alt="whatsapp" width="35">
                                                 </a>
                                             </th>
@@ -72,20 +82,20 @@
                                             <th scope="row">{{ optional($user->level)->title }}</th>
                                             <th scope="row">{{ optional($user->level)->profit_percentage }}%</th>
                                             <th scope="row"> {{ $user->user_balance}} $
-                                                <br> 
+                                                <br>
                                                 {{ $user->getExchangeRate() }} {{ $user->getExchangeSymbol() }}
                                             </th>
                                             <th scope="row">{{ __($user->status())}}</th>
                                             <th scope="row">
                                                 {{-- {{ $user->created_at->format('Y-m-d h:i') }} --}}
-                                                {{-- {{ ($user->created_at->format('A')=='AM'?__('am') : __('pm')) }}  <br> --}}
+                                                {{-- {{ ($user->created_at->format('A')=='AM'?__('am') : __('pm')) }} <br> --}}
                                                 @if ($user)
                                                     {{ $user->created_at->diffForHumans() }} <br>
                                                     {{ $user->created_at->format('Y-m-d') }}
                                                     ({{ $user->created_at->format('h:i') }})
-                                                    {{ ($user->created_at->format('A')=='AM'?__('am') : __('pm')) }}  <br>
+                                                    {{ ($user->created_at->format('A') == 'AM' ? __('am') : __('pm')) }} <br>
                                                 @else
-                                                {{ __('no_update') }}
+                                                    {{ __('no_update') }}
                                                 @endif
                                             </th>
 
@@ -118,4 +128,11 @@
     </div>
 @endsection
 @section('script')
+    <script>
+        function confirmWithdraw() {
+            if (confirm("هل أنت متأكد أنك تريد سحب جميع أرصدة المستخدمين؟")) {
+                document.getElementById('withdrawForm').submit();
+            }
+        }
+    </script>
 @endsection
