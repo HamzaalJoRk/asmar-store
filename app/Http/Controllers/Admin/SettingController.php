@@ -40,6 +40,7 @@ class SettingController extends Controller
             'title' => 'required',
             'email' => 'sometimes|nullable|email',
             'logo' => 'sometimes|nullable',
+            'description_bar' => 'sometimes|nullable',
             'fav_icon' => 'sometimes|nullable',
             'link' => 'nullable',
             'website_active' => 'required|boolean',

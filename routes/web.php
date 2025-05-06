@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvertisementController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\AuthController;
@@ -98,6 +99,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale() . '/ad', 'as' => 'ad.
     //settings routes
     Route::get('/settings/general', [SettingController::class, 'general'])->name('settings.general');
     Route::resource('settings', SettingController::class)->only(['store']);
+    Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements');
 
     //profile routes
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -114,6 +116,12 @@ Route::group(['prefix' => LaravelLocalization::setLocale() . '/ad', 'as' => 'ad.
     //cities
     Route::resource('cities', CityController::class);
 
+});
+
+Route::prefix('admin/settings')->group(function () {
+    Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('ad.settings.index');
+    Route::post('/advertisements', [AdvertisementController::class, 'store'])->name('ad.settings.store');
+    Route::delete('/advertisements/{id}', [AdvertisementController::class, 'destroy'])->name('ad.settings.destroy');
 });
 
 

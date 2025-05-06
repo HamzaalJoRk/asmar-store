@@ -1,6 +1,8 @@
 @extends('front.layouts.master')
 
-@section('title') @lang('translation.index') @endsection
+@section('title')
+    @lang('translation.index')
+@endsection
 
 @section('body')
 
@@ -8,12 +10,31 @@
 @endsection
 
     @section('content')
-        <div class="app-search d-lg-block">
+        {{-- عرض الإعلان إن وجد --}}
+        @if($advertisement && $advertisement->getFirstMediaUrl('image'))
+            <div class="text-center mb-4">
+                {{-- الصورة --}}
+                <img src="{{ $advertisement->getFirstMediaUrl('image') }}" alt="Advertisement" class="img-fluid rounded"
+                    style="max-height: 300px;">
+
+                {{-- النص --}}
+                @if($advertisement->description)
+                    <p class="mt-3" style="font-size: 1.2rem;">
+                        {{ $advertisement->description }}
+                    </p>
+                @endif
+            </div>
+        @endif
+
+        {{-- شريط البحث --}}
+        <div class="app-search d-lg-block mb-4 animate__animated animate__fadeInDown">
             <div class="position-relative">
                 <input type="text" class="form-control" id="searchInput" placeholder="@lang('translation.Search')">
                 <span class="bx bx-search-alt"></span>
             </div>
         </div>
+
+        {{-- قائمة التصنيفات --}}
         <div class="row">
             <div class="form-group products">
                 <div class="form-row">
@@ -22,14 +43,13 @@
                             @isset($categories)
                                 @foreach($categories as $category)
                                     <li class="col-4 pr-0 pl-0">
-                                        <a href="{{route('front.game.category', $category->id)}}"
+                                        <a href="{{ route('front.game.category', $category->id) }}"
                                             class="product_group @if(!$category->active || $category->games->count() == 0) disabled @endif"
                                             data-group="soulchill">
                                             <div class="name_wrp"
                                                 style="background-image:url({{ asset('storage/' . $category->image) }});">
                                                 <div class="icon">
-                                                    <img src="{{ $category->image }}"
-                                                        alt="{{ $category->name }}" width="60">
+                                                    <img src="{{ $category->image }}" alt="{{ $category->name }}" width="60">
                                                 </div>
                                             </div>
                                             <span class="d-block mt-2 mb-2">{{$category->name}}</span>
@@ -43,9 +63,20 @@
             </div>
         </div>
     @endsection
+
     @section('script')
+        {{-- إضافة حركة عند الكتابة في شريط البحث --}}
         <script>
             $(document).ready(function () {
+                // الحركة عند الكتابة
+                $('#searchInput').on('input', function () {
+                    $(this).addClass('animate__animated animate__pulse');
+                    setTimeout(() => {
+                        $(this).removeClass('animate__animated animate__pulse');
+                    }, 500);
+                });
+
+                // فحص النص المدخل في البحث لعرض أو إخفاء التصنيفات
                 $('#searchInput').on('keyup', function () {
                     var value = $(this).val().toLowerCase();
                     $('#products_list li').filter(function () {
@@ -53,10 +84,8 @@
                     });
                 });
             });
-
         </script>
     @endsection
-
 
 
 

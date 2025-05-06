@@ -18,6 +18,14 @@
                     </a>
                 </li>
                 @endif
+                @if (auth()->user()->hasPermission('read_settings'))
+                <li>
+                    <a href="{{route('ad.advertisements')}}" >
+                        <i class="fa fa-cogs"></i>
+                        <span key="t-dashboards">الاعلانات</span>
+                    </a>
+                </li>
+                @endif
                 @if (auth()->user()->hasPermission('read_admins'))
                 <li>
                     <a href="{{route('ad.admins.index')}}" >

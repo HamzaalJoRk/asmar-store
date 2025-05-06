@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-sm-6">
                 <script>document.write(new Date().getFullYear())</script> ©
-                <a href="https://kaybyte.com" class="active">
-                    kaybyte.com
+                <a href="#" class="active">
+                    
                 </a>
             </div>
             <div class="col-sm-6">

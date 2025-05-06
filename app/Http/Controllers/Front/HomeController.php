@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Advertisement;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Game;
@@ -32,16 +33,17 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        if(Auth::check()){
-            if(Auth::user()->whats_app == null) {
+        if (Auth::check()) {
+            if (Auth::user()->whats_app == null) {
                 return redirect()->route('front.completeRegister');
             }
         }
-        $games =Game::IsShow()->get();
+        $games = Game::IsShow()->get();
         $categories = Category::all();
         return view('front.index')->with([
-            'games'=>$games,
-            'categories'=>$categories,
+            'games' => $games,
+            'categories' => $categories,
+            'advertisement' => Advertisement::first(),
         ]);
     }
 
@@ -49,17 +51,18 @@ class HomeController extends Controller
     public function getCities($country_id)
     {
 
-        $cities =City::where('country_id',$country_id)->get();
-        return json_encode(['cities'=>$cities]);
+        $cities = City::where('country_id', $country_id)->get();
+        return json_encode(['cities' => $cities]);
     }
 
-    public function  uploadImage(Request $request){
+    public function uploadImage(Request $request)
+    {
 
         $uploadedFile = $request->file('image');
         $extension = $uploadedFile->getClientOriginalExtension();
-        $model= $request->model::whereId($request->id)->first();
+        $model = $request->model::whereId($request->id)->first();
         $model->addMedia($uploadedFile)
-            ->usingFileName(time().'.'.$extension)
+            ->usingFileName(time() . '.' . $extension)
             ->toMediaCollection($request->name);
         return back();
     }
