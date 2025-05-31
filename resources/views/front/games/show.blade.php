@@ -401,12 +401,17 @@
         </form>
         <div class="row mt-3">
             @auth()
-                <button type="submit" 
+            <button type="submit" 
                         class="btn btn-primary btn-block checkout w-50 m-auto"
                         id="submit"
                         onclick="this.disabled=true;document.getElementById('neworder').submit()">
                     {{__('translation.add')}}
                 </button>
+                <!-- <button type="submit" name="add"
+                        class="btn btn-primary btn-block checkout w-50 m-auto"
+                id="submit">{{__('translation.add')}}</button> -->
+            @elseauth()
+
             @endauth
         </div>
     </div>
@@ -516,4 +521,26 @@
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function(){
+            $('#qty').keyup(getQty);
+            
+            $('#neworder').submit(function(e) {
+                const qty_item = $('#qty_item').val();
+                if(qty_item <= 0 || qty_item === '') {
+                    Swal.fire({
+                        title: '{{__('translation.error')}}',
+                        text: '{{__('translation.please_chose_items_first')}}',
+                        icon: 'error',
+                    });
+                    $('#submit').prop('disabled', false);
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+
+
 @endsection
