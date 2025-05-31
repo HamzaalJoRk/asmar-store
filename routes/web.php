@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\AdvertisementController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale() . '/ad', 'as' => 'ad.
     Route::get('/dashboard', function () {
         return view('admin.index');
     })->name('index');
+        Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
 
     // Update controller from ProviderController to CurdGamesController
     Route::get('games/fetch-products', [CurdGamesController::class, 'fetchProducts'])->name('games.fetch-products');
@@ -170,6 +172,7 @@ Route::group(
         Route::get('/orders/{type?}', [FrontOrderController::class, 'index'])->name('front.orders')->middleware('auth');
 
         /********** Providers *************/
+
 
     }
 );

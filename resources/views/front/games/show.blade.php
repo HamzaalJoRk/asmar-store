@@ -45,7 +45,6 @@
             display: block;
             overflow: hidden;
             position: relative;
-
             margin: .5em;
             box-shadow: rgba(0,0,0,.25) 0 0 1em;
             border-radius: .5em;
@@ -299,9 +298,6 @@
                                             <div class="price">
                                                 {{get_helper_price($package->price,true)}}
                                                 <br>
-{{--                                                <span class="altprice">--}}
-{{--                                                    ‎~ ₺98.33--}}
-{{--                                                </span>--}}
                                             </div>
                                         </a>
                                     </li>
@@ -317,12 +313,8 @@
                 </div>
 
                     <input type="hidden" id="qty_item" name="qty_item"  value="{{$game->have_packages ? 0 : 1}}">
-
-
-
-                <div class="form-row">
+                                    <div class="form-row">
                     <div class="col">
-
                         <input type="hidden" id="game_id" name="game_id" value="{{$game->id}}">
                         <input type="hidden" id="package_id" name="package_id" value="">
                     </div>
@@ -339,7 +331,6 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-
                     </div>
                     <div class="col-6">
                         <label for="total">@lang('translation.final_total')</label>
@@ -382,25 +373,14 @@
                         </div>
                     @endif
                 </div>
-
             </div>
             <div class="alert-wrap mt-3 checkout">
                 <div class="alert alert-success product-info">
                     <span class="pull-left total_q" style="font-size:1em;"></span>
-
-
-
-
-                    <span class="product-qty">
-
-                        </span>
-                    </span>
-                    <strong class="product-name mr-2 ml-2">{{$game->title}} <span class="package-qty">
-
-                        </span>  {{$game->name_currency}}</strong>
+                    <span class="product-qty"></span>
+                    <strong class="product-name mr-2 ml-2">{{$game->title}} <span class="package-qty"></span> {{$game->name_currency}}</strong>
                     <span>
                     <div class="pull-right product-icon">
-
                         <img src="{{$game->icon_currancy}}">
                         x
                     </div>
@@ -413,29 +393,26 @@
                         &nbsp;
                         {{__('translation.This product operates automatically, 24 hours a day, all year round')}}</div>
                 </div>
-
             </div>
             <div class="form-group">
                 <label for="note">{{__('translation.notes')}}:</label>
                 <textarea name="note" class="form-control" id="note" placeholder="{{__('translation.Insert a note for the sales team (optional)')}}"></textarea>
             </div>
-
         </form>
         <div class="row mt-3">
             @auth()
-                <button type="submit" name="add"
+                <button type="submit" 
                         class="btn btn-primary btn-block checkout w-50 m-auto"
-                id="submit">{{__('translation.add')}}</button>
-            @elseauth()
-
+                        id="submit"
+                        onclick="this.disabled=true;document.getElementById('neworder').submit()">
+                    {{__('translation.add')}}
+                </button>
             @endauth
         </div>
     </div>
 @endsection
+
 @section('script')
-
-
-
     <!-- Sweet Alerts js -->
     <script src="{{asset('build/libs/sweetalert2/sweetalert2.min.js')}}"></script>
     @if(session()->has('error_m'))
@@ -455,37 +432,40 @@
                 text:"{{session()->get('message')}}",
                 icon:"success"
             })
-
         </script>
     @endif
     <script>
         @if(!$game->have_packages) getQty(); @endif
-        function changePackage (id,qty,price_item){
+        
+        function changePackage(id, qty, price_item) {
             $('.package .checked').hide();
             $('#package-checked-'+id).show();
             $('#package_id').val(id);
             $('#qty_item').val(qty);
-            $('#price_item').val(price_item)
+            $('#price_item').val(price_item);
             getQty();
         }
-        function getQty (){
+        
+        function getQty() {
             var qty = $('#qty').val();
-            var have_packages={{$game->have_packages}};
+            var have_packages = {{$game->have_packages}};
             var qty_item = $('#qty_item').val();
             var currency_code = $('#currency_code').val();
-            if(qty_item <= 0 || qty_item === '' ){
+            
+            if(qty_item <= 0 || qty_item === '') {
                 Swal.fire({
                     title: '{{__('translation.error')}}',
                     text: '{{__('translation.please_chose_items_first')}}',
                     icon: 'error',
-                })
+                });
+                return false;
             }
           
-            if(have_packages === 1){
+            if(have_packages === 1) {
                 var qty_all = qty * qty_item;
                 $('.package-qty').html(qty_item);
                 $('.product-qty').html(qty);
-            }else{
+            } else {
                 $('.package-qty').hide();
                 $('.product-qty').html(qty);
             }
@@ -493,38 +473,47 @@
             var base_price = $('#price_item').val();
             var profit_percentage = parseFloat($('#profit_percentage').val()) || 0;
             
-            // حساب السعر النهائي مباشرة مع الربح
+            // Calculate final price with profit
             var final_price = base_price * (1 + (profit_percentage / 100));
             var total = (qty * final_price).toFixed(10);
             
-            // تحديث السعر النهائي فقط في الواجهة
+            // Update UI
             $('#total').val(total);
-            $('.total_q').text(total + currency_code);
+            $('.total_q').text(total + ' ' + currency_code);
             
-            // تحديث الحقول المخفية للحسابات الداخلية
+            // Update hidden calculation fields
             $('#base_total').val((qty * base_price).toFixed(10));
             $('#profit_amount').val((total - (qty * base_price)).toFixed(10));
             $('#final_total').val(total);
         }
 
         $(document).ready(function(){
-            $('#qty').keyup(function(){
-                getQty();
-            });
-            $('#submit').click(function() {
-                var qty_item = $('#qty_item').val();
-                if(qty_item <= 0 || qty_item === '' ){
+            $('#qty').on('input', getQty);
+            
+            $('#neworder').submit(function(e) {
+                const submitBtn = $('#submit');
+                const qty_item = $('#qty_item').val();
+                
+                if(qty_item <= 0 || qty_item === '') {
                     Swal.fire({
                         title: '{{__('translation.error')}}',
                         text: '{{__('translation.please_chose_items_first')}}',
                         icon: 'error',
-                    })
-                }else{
-                    $('#neworder').submit();
+                    });
+                    submitBtn.prop('disabled', false);
+                    return false;
                 }
+                
+                
+                // Prevent double submission
+                if(submitBtn.prop('disabled')) {
+                    return false;
+                }
+                
+                submitBtn.prop('disabled', true);
+                submitBtn.html('<i class="fa fa-spinner fa-spin"></i> {{__('translation.processing')}}');
+                return true;
             });
         });
     </script>
-
-
 @endsection

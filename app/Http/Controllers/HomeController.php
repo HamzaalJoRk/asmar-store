@@ -123,4 +123,35 @@ class HomeController extends Controller
             }
         }
     }
+
+    public function financialReport(Request $request)
+    {
+        $type = $request->get('type', 'in'); // 'in' للطلبات، 'out' للتحويلات
+        $date_from = $request->get('date_from');
+        $date_to = $request->get('date_to');
+
+        // query builder لكل من orders و transactions مع فلترة التاريخ والحالة
+        $ordersQuery = \App\Models\Order::where('status', 'approved');
+        $transactionsQuery = \App\Models\Transaction::where('status', 'approved');
+
+        if ($date_from) {
+            $ordersQuery->whereDate('created_at', '>=', $date_from);
+            $transactionsQuery->whereDate('created_at', '>=', $date_from);
+        }
+        if ($date_to) {
+            $ordersQuery->whereDate('created_at', '<=', $date_to);
+            $transactionsQuery->whereDate('created_at', '<=', $date_to);
+        }
+
+        // جلب البيانات مع pagination
+        $orders = $ordersQuery->paginate(20);
+        $transactions = $transactionsQuery->paginate(20);
+
+        // حساب المجموعات
+        $totalIn = $ordersQuery->sum('final_total');
+        $totalOut = $transactionsQuery->sum('final_total');
+
+        return view('your_view_name', compact('orders', 'transactions', 'totalIn', 'totalOut', 'type', 'date_from', 'date_to'));
+    }
+
 }

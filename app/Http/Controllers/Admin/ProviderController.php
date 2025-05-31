@@ -84,8 +84,8 @@ class ProviderController extends Controller
                 case 'Elexellans':
                     $apiUrl = 'https://api.elexellans.com.tr/client/api/products';
                     break;
-                case 'YamanPay':
-                    $apiUrl = 'https://api.yaman-pay.com/client/api/products';
+                case 'yassin':
+                    $apiUrl = 'https://api.yassen-card.com/client/api/products';
                     break;
                 case 'saud':
                     $apiUrl = 'https://api.saud-card.com/client/api/products';
